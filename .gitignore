@@ -1,0 +1,28 @@
+# Ignore Composer dependencies
+/vendor/
+
+# Ignore environment files
+.env
+
+# Ignore log files
+*.log
+
+# Ignore cache files
+/cache/*
+/tmp/*
+
+# Ignore OS generated files
+.DS_Store
+Thumbs.db
+
+# Ignore compiled PHP files
+*.phar
+*.opcache
+
+# Ignore backup files
+*~
+*.bak
+
+
+# Extensions
+*.*swp
