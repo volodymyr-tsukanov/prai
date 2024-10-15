@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <html lang="pl">
-
 <head>
     <meta charset="UTF-8">
     <title>Form receiver</title>
 </head>
-
 <body>
     <div>
         <h2>Dane odebrane z formularza:</h2>
