@@ -8,7 +8,7 @@
     <?php
     $jezyki = ["C", "CPP", "Java", "C#", "HTML", "CSS", "XML", "PHP", "JavaScript"];
 
-    echo '<form action="odbierz3.php" method="POST">';
+    echo '<form action="odbierz4.php" method="POST">';
     echo '<table>';
     echo '<tr><td>Nazwisko: </td><td><input name="nazw" size="30" id="nazw"/></td></tr>';
     echo '<tr><td>Wiek:</td><td><input name="wiek" size="30" id="wiek"/></td></tr>';
