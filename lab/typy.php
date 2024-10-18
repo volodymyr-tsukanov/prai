@@ -22,6 +22,7 @@
         $ae=[];
         $as=["zielony", "czerwony", "niebieski"];
         $ap=["Agata", "Agatowska", 4.67, true];
+        $dt = new DateTime();
         print($i.'<br>'.$d.'<br>'.$b1.'<br>'.$b2.'<br>'.$b.'<br>'.$si.'<br>'.$s.'<br>'.(arr_export($a)).'<br>'.(arr_export($ae)).'<br>'.(arr_export($as))."<br".(arr_export($ap)));
         echo('<br><br>');
         echo('czy i=1234 to Object: '.is_object($i).'<br>');
@@ -34,6 +35,7 @@
         echo('czy ae to Array: '.is_array($ae).'<br>');
         echo('czy ap to Array: '.is_array($ap).'<br>');
         echo('czy ap to Object: '.is_object($ap).'<br>');
+        echo('czy dt to Object: '.is_object($dt).'<br>');
         echo('czy d to NaN: '.is_nan($d).'<br>');
         echo('<br><br>');
         echo('czy 1 == true: '.($b1==$b).'<br>');
