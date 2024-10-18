@@ -7,6 +7,7 @@
 <body>
     <?php
     $jezyki = ["C", "CPP", "Java", "C#", "HTML", "CSS", "XML", "PHP", "JavaScript"];
+    $zaplaty = ["eurocard", "visa", "przelew"];
 
     echo '<form action="odbierz4.php" method="POST">';
     echo '<table>';
@@ -19,16 +20,15 @@
     echo '</select></td></tr>';
     echo '<tr><td>Adres e-mail: </td><td><input name="email" size="30" id="email"/></td></tr>';
     echo '</table>';
-
     echo '<h4>Zamawiam tutorial z języka:</h4>';
     foreach ($jezyki as $jezyk) {
         echo '<input name="jezyki[]" type="checkbox" value="'.$jezyk.'" />'.$jezyk.' ';
     }
-
     echo '<h4>Sposób zapłaty:</h4>';
-    echo '<input name="zaplata" type="radio" value="euro" />eurocard';
-    echo '<input name="zaplata" type="radio" value="visa" checked />visa';
-    echo '<input name="zaplata" type="radio" value="przelew" />przelew bankowy';
+    foreach ($zaplaty as $zaplata){
+        echo "<input name='zaplata' type='radio' value='$zaplata' />$zaplata";
+    }
+    echo '<input name="zaplata" type="radio" value="cash" checked />gotówką 🤫';
     echo '<br><input type="submit" value="Wyślij" />';
     echo '<input type="reset" value="Anuluj" />';
     echo '</form>';

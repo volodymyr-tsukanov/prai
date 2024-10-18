@@ -13,27 +13,24 @@
 
             print('a) foreach<br>');
             foreach ($_REQUEST['jezyki'] as $jezyk) {
-                echo "$jezyk <br>";
+                echo "$jezyk ";
             }
             print('<br>b) join()<br>');
-            $selectedCourses = join(", ", $_REQUEST['jezyki']);
-            echo $selectedCourses;
+            print(join(', ',$_REQUEST['jezyki']));
         } else {
             echo "<h3>Nie wybrano żadnych kursów.</h3>";
         }
 
         echo "<h3>Wszystkie parametry:</h3>";
         foreach ($_REQUEST as $key => $value) {
-            echo "$key:";
+            echo "$key: ";
             if (is_array($value)) {
-                foreach ($value as $item) {
-                    echo " $item;";
-                }
-                print('<br>');
+                echo implode(' | ',$value).'<br>';
             } else {
-                echo " $value <br>";
+                echo "$value <br>";
             }
         }
+        
         ?>
     </div>
 </body>
