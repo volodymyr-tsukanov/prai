@@ -7,8 +7,9 @@
 <body>
     <?php
     include_once "funkcje.php";
-    
-    $dataPath = 'data/dane.txt';
+
+    $doc_root = $_SERVER['DOCUMENT_ROOT'];
+    $dataPath = 'data/dane.txt';    //"$doc_root/../dtst/dane.txt";
     $jezyki = ["C", "CPP", "Java", "C#", "HTML", "CSS", "XML", "PHP", "JavaScript"];
     $zaplaty = ["eurocard", "visa", "przelew"];
     $akcje = ["Wyczyść", "Zapisz", "Pokaż", "PHP", "CPP", "Java"];
@@ -90,6 +91,10 @@
                 echo "<h3>To jest podejżane 🤨</h3>";
                 break;
         }
+    }
+
+    foreach ($_SERVER as $key => $value) {
+        echo "$key: $value<br>";
     }
     ?>
 </body>

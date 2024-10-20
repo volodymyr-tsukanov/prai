@@ -30,7 +30,6 @@
                 echo "$value <br>";
             }
         }
-        
         ?>
     </div>
 </body>
