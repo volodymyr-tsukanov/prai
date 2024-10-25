@@ -1,3 +1,4 @@
 surname 19 pl s97129@pollub.edu.pl Java,HTML,PHP przelew
 fsfsf 14 gb g@g C,CPP eurocard
 st32 19 pl s129@pollub.edu.pl C,CPP,Java,C#,HTML,CSS,XML,PHP,JavaScript cash
+v 19 gb s@gmail.com C,C#,PHP przelew

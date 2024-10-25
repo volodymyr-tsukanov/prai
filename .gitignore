@@ -24,5 +24,8 @@ Thumbs.db
 *.bak
 
 
+# IDEs
+.idea
+
 # Extensions
 *.*swp

@@ -9,7 +9,7 @@
     include_once "funkcje.php";
 
     $doc_root = $_SERVER['DOCUMENT_ROOT'];
-    $dataPath = 'data/dane.txt';    //"$doc_root/../dtst/dane.txt";
+    $dataPath = 'data/dane.csv';    //"$doc_root/../dtst/dane.txt";
     $jezyki = ["C", "CPP", "Java", "C#", "HTML", "CSS", "XML", "PHP", "JavaScript"];
     $zaplaty = ["eurocard", "visa", "przelew"];
     $akcje = ["Wyczyść", "Zapisz", "Pokaż", "PHP", "CPP", "Java"];
@@ -55,7 +55,7 @@
     function gatherData(){  // == dodaj ze skryptu
         global $nazw, $wiek, $kraj, $email, $tutoriale, $zaplata;
         if ($nazw && $wiek && $email && $kraj && $zaplata && !empty($tutoriale)){
-            return "$nazw $wiek $kraj $email ".implode(',',$tutoriale)." $zaplata";
+            return implodeData($nazw,$wiek,$email,$kraj,$zaplata,$tutoriale);
         } else {
             echo "<h3>Dane nie w pełni uzupełnione. Wypełnij formularz.</h3>";
             return null;
