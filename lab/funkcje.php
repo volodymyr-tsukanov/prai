@@ -18,6 +18,7 @@ function printHTMLhead($title){
 <head>
     <meta charset='UTF-8'>
     <title>$title</title>
+    <link rel='stylesheet' href='style/style.css'/>
 </head><body>");
 }
 function printHTMLtail(){
