@@ -5,7 +5,7 @@ $dataPath = 'data/dane.csv';
 //"$doc_root/../dtst/dane.txt";
 $jezyki = ["C", "CPP", "Java", "C#", "HTML", "CSS", "XML", "PHP", "JavaScript"];
 $zaplaty = ["eurocard", "visa", "przelew"];
-$akcje = ["Wyczyść", "Zapisz", "Pokaż", "PHP", "CPP", "Java"];
+$akcje = ["Wyczyść", "Zapisz", "Pokaż", "PHP", "CPP", "Java", "Staty"];
 
 $submit = isset($_POST['submit']) ? $_POST['submit'] : null;
 
@@ -83,6 +83,27 @@ function gatherData(){  // == dodaj ze skryptu
     }
 }
 
+function procStats(&$stats, $line, $tableFormat=false){
+    // Split the line into columns
+    $columns = explode('|', trim($line));
+
+    // Check if the line has the required number of columns
+    if (count($columns) >= 2) {
+        // Get the age (second column)
+        $age = (int)$columns[1];
+
+        // Increment total orders
+        $stats['totalOrders']++;
+
+        // Check age group and increment accordingly
+        if ($age < 18) {
+            $stats['under18']++;
+        } elseif ($age > 49) {
+            $stats['over49']++;
+        }
+    }
+}
+
 
 setDebugMode(1);
 printHTMLhead('Files',true);    //change to false
@@ -107,6 +128,15 @@ if($submit){
             break;
         case 'Java':
             readFromCSV($dataPath, true, 'showByTut','Java');
+            break;
+        case 'Staty':
+            $stats = [
+                'totalOrders' => 0,
+                'under18' => 0,
+                'over49' => 0
+            ];
+            $stats = readFromCSV($dataPath, false, 'procStats', $stats);
+            var_export($stats);
             break;
         default:
             echo "<h3>To jest podejżane 🤨</h3>";

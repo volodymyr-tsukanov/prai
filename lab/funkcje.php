@@ -88,8 +88,11 @@ function readFromCSV($path, $tableFormat=false, $procLnFunc=null,$procLnFuncArg=
         while (!feof($fl)) {
             $line = fgets($fl);
             if ($line !== false) {
-                if (isset($procLnFunc) && isset($procLnFuncArg)) {
-                    $procLnFunc($procLnFuncArg, $line,$tableFormat);
+                if (isset($procLnFunc)) {
+                    if(isset($procLnFuncArg))
+                        $procLnFunc($procLnFuncArg, $line,$tableFormat);
+                    else
+                        $procLnFunc($line,$tableFormat);
                 } else {
                     printCSVEntry(explode('|',$line),$tableFormat);
                 }
@@ -99,6 +102,8 @@ function readFromCSV($path, $tableFormat=false, $procLnFunc=null,$procLnFuncArg=
             echo '</tbody></table>';
         }
         fclose($fl);
+
+        if(isset($procLnFunc) && isset($procLnFuncArg)) return $procLnFuncArg;
     } else print('<h3>Nie ma takiego pliku</h3>');
 }
 
