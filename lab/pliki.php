@@ -7,12 +7,6 @@ $jezyki = ["C", "CPP", "Java", "C#", "HTML", "CSS", "XML", "PHP", "JavaScript"];
 $zaplaty = ["eurocard", "visa", "przelew"];
 $akcje = ["Wyczyść", "Zapisz", "Pokaż", "PHP", "CPP", "Java"];
 
-$nazw = isset($_POST['nazw']) ? $_POST['nazw'] : null;
-$wiek = isset($_POST['wiek']) ? $_POST['wiek'] : null;
-$email = isset($_POST['email']) ? $_POST['email'] : null;
-$kraj = isset($_POST['kraj']) ? $_POST['kraj'] : null;
-$tutoriale = isset($_POST['jezyki']) ? $_POST['jezyki'] : [];
-$zaplata = isset($_POST['zaplata']) ? $_POST['zaplata'] : null;
 $submit = isset($_POST['submit']) ? $_POST['submit'] : null;
 
 
@@ -46,18 +40,52 @@ function printForm(){
 }
 
 function gatherData(){  // == dodaj ze skryptu
-    global $nazw, $wiek, $kraj, $email, $tutoriale, $zaplata;
-    if ($nazw && $wiek && $email && $kraj && $zaplata && !empty($tutoriale)){
-        return implodeData($nazw,$wiek,$email,$kraj,$zaplata,$tutoriale);
+    global $dataPath;
+
+    $args = ['nazw' => ['filter' => FILTER_VALIDATE_REGEXP,
+        'options' => ['regexp' => '/^[A-Z]{1}[a-ząęłńśćźżó-]{1,25}$/']
+    ],
+    'wiek' => [
+        'filter' => FILTER_VALIDATE_INT,
+        'options' => [
+            'min_range' => 18, //pełnoletnie tylko
+            'max_range' => 120 //ludzie tak długo nie żyją
+        ]
+    ],
+    'kraj' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+    'email' => [
+        'filter' => FILTER_VALIDATE_EMAIL
+    ],
+    'zaplata' => [
+        'filter' => FILTER_SANITIZE_STRING
+    ],
+    'jezyki' => ['filter' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+        'flags' => FILTER_REQUIRE_ARRAY
+    ]
+    ];
+
+    //przefiltruj dane z GET/POST zgodnie z ustawionymi w $args filtrami:
+    $dane = filter_input_array(INPUT_POST, $args);
+    //pokaż tablicę po przefiltrowaniu - sprawdź wyniki filtrowania:
+    var_dump($dane);
+    //Sprawdź czy dane w tablicy $dane nie zawierają błędów walidacji:
+    $errors = "";
+    foreach ($dane as $key => $val) {
+        if ($val === false or $val === NULL) {
+            $errors .= $key.' ';
+        }
+    }
+    
+    if ($errors === ""){
+        writeToCSV($dataPath, implodeData($dane), 'Nazwisko|Wiek|Państwo|Email|Zapłata|Języki');
     } else {
-        echo "<h3>Dane nie w pełni uzupełnione. Wypełnij formularz.</h3>";
-        return null;
+        echo "<h3>Dane nie w pełni uzupełnione. Wypełnij formularz.</h3> " . $errors;
     }
 }
 
 
 setDebugMode(1);
-printHTMLhead('Files');
+printHTMLhead('Files',true);    //change to false
 printForm();
 printHTMLtail();
 
@@ -66,10 +94,7 @@ if($submit){
         case 'Wyczyść': //nic do wyświetlenia
             break;
         case 'Zapisz':
-            $data = gatherData();
-            if($data){
-                writeToCSV($dataPath, $data, 'Nazwisko|Wiek|Państwo|Email|Zapłata|Języki');
-            }
+            gatherData();
             break;
         case 'Pokaż':
             readFromCSV($dataPath, true);

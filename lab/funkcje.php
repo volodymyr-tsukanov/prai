@@ -11,14 +11,17 @@ function setDebugMode($mode){
 
 
 // HTML
-function printHTMLhead($title){
+function printHTMLhead($title,$useStyle=false){
+    $stl = '';
+    if($useStyle) $stl = '<link rel="stylesheet" href="style/style.css"/>';
+
     header('Content-Type: text/html');
     print("<!DOCTYPE html>
 <html lang='pl'>
 <head>
     <meta charset='UTF-8'>
     <title>$title</title>
-    <link rel='stylesheet' href='style/style.css'/>
+    $stl
 </head><body>");
 }
 function printHTMLtail(){
@@ -27,7 +30,7 @@ function printHTMLtail(){
 
 
 // Data format
-function implodeData(...$dataArr){
+function implodeData($dataArr){
     $result = '';
     $sprt = '|';
     foreach ($dataArr as $elem) {

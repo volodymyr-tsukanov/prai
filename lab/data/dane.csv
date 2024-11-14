@@ -1,5 +1,6 @@
 Nazwisko|Wiek|Państwo|Email|Zapłata|Języki
-v|19|s@gmail.com|pl|cash|C,CPP,C#,HTML,CSS,XML,PHP
-v2342|123|dfsag@gmail.com|gb|eurocard|C,CSS,JavaScript
-vvvv|72|s97129@pollub.edu.pl|gb|cash|CPP,C#
-vvvv|45|s97129@pollub.edu.pl|gb|visa|C,PHP,JavaScript
+v|19|pl|s@gmail.com|cash|C,CPP,C#,HTML,CSS,XML,PHP
+v2342|123|gb|dfsag@gmail.com|eurocard|C,CSS,JavaScript
+vvvv|72|gb|s97129@pollub.edu.pl|cash|CPP,C#
+vvvv|45|gb|s97129@pollub.edu.pl|visa|C,PHP,JavaScript
+Dzik|32|pl|s97129@pollub.edu.pl|visa|Java,XML
