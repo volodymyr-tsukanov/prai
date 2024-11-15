@@ -62,6 +62,15 @@ function printCSVEntry($entry, $tableFormat=false){
 
 
 // Files
+const FILE_TYPE_TXT = 0;
+const FILE_TYPE_CSV = 1;
+const FILE_TYPE_JSON = 6;
+const FILE_TYPE_XML = 11;
+
+function writeToFile(string $path, $data, $mode = FILE_TYPE_TXT){
+    
+}
+
 function writeToCSV($path, $data, $head=null){
     $printingHead = !file_exists($path) && isset($head);
 
@@ -105,6 +114,7 @@ function readFromCSV($path, $tableFormat=false, $procLnFunc=null,$procLnFuncArg=
 
         if(isset($procLnFunc) && isset($procLnFuncArg)) return $procLnFuncArg;
     } else print('<h3>Nie ma takiego pliku</h3>');
+    return null;
 }
 
 
