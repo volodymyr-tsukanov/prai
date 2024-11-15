@@ -74,3 +74,4 @@ class User {
         printf('User: %s %s %s status=%d %s', $this->userName,$this->fullName,$this->email,$this->status,$this->date->format(DateTime::W3C));
     }
 }
+?>
