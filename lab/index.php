@@ -1,21 +1,14 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>Lab1</title>
-    </head>
-    <body>
-        <?php
-        echo "<h2>Pierwszy skrypt PHP</h2>";
-        $n=4567; $x=10.123456789;
-        //a
-        //echo "Domyślny format: ".$n." ".$x."<br>";
-        //b
-        echo "Domyślny format: n=$n x=$x <br>";
-        //c
-        //echo 'Domyślny format: $n $x <br>';
-        //d
-        printf("Zaokrąglenie do liczby całkowitej x=%d, <br>z trzema cyframi po kropce x=%.3f", $x, $x);
-        ?>
-    </body>
-</html>
+<?php
+namespace prai_lab;
+
+include_once "funkcje.php";
+include "php_classes/User.php";
+
+
+printHTMLhead('Lab5', true);
+
+$user1 = new User ('kp', 'Kubus Puchatek', 'kubus@stumilowylas.pl', 'nielubietygryska');
+$user1->show();
+
+printHTMLtail();
+?>
