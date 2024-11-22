@@ -30,7 +30,7 @@ function printHTMLtail(){
 
 
 // Data format
-function implodeData($dataArr){
+function implodeData($dataArr): string{
     $result = '';
     $sprt = '|';
     foreach ($dataArr as $elem) {
@@ -42,6 +42,18 @@ function implodeData($dataArr){
         $result .= $sprt;
     }
     return substr($result, 0, -1);
+}
+function arrToSQLValues($dataArr): string{
+    $result = '(';
+    foreach ($dataArr as $elem) {
+        if (is_array($elem)){
+            $result .= implode(';',$elem);
+        } else {
+            $result .= "'$elem'";
+        }
+        $result .= ',';
+    }
+    return substr($result, 0, -1).')';
 }
 
 function printCSVEntry($entry, $tableFormat=false){
