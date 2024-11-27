@@ -5,8 +5,8 @@ include_once 'funkcje.php';
 require_once 'php_classes/DTBase.php';
 
 
-$jezyki = ["C", "CPP", "Java", "C#", "HTML", "CSS", "XML", "PHP", "JavaScript"];
-$zaplaty = ["eurocard", "Visa", "przelew"];
+$jezyki = ["CPP", "Java", "PHP"];
+$zaplaty = ["Master Card", "Visa", "Przelew"];
 $akcje = ["Wyczyść", "Dodaj", "Pokaż", "PHP", "CPP", "Java", "Staty"];
 
 $submit = isset($_POST['submit']) ? $_POST['submit'] : null;
