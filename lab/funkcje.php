@@ -47,7 +47,7 @@ function arrToSQLValues($dataArr): string{
     $result = '(';
     foreach ($dataArr as $elem) {
         if (is_array($elem)){
-            $result .= implode(';',$elem);
+            $result .= "'".implode(',',$elem)."'";
         } else {
             $result .= "'$elem'";
         }

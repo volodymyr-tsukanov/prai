@@ -6,12 +6,12 @@ require_once 'php_classes/DTBase.php';
 
 
 $jezyki = ["C", "CPP", "Java", "C#", "HTML", "CSS", "XML", "PHP", "JavaScript"];
-$zaplaty = ["eurocard", "visa", "przelew"];
-$akcje = ["Wyczyść", "Zapisz", "Pokaż", "PHP", "CPP", "Java", "Staty"];
+$zaplaty = ["eurocard", "Visa", "przelew"];
+$akcje = ["Wyczyść", "Dodaj", "Pokaż", "PHP", "CPP", "Java", "Staty"];
 
 $submit = isset($_POST['submit']) ? $_POST['submit'] : null;
 
-$dbName = 'klienci15';
+$dbName = 'klienci';
 
 
 function printForm(){
@@ -45,7 +45,7 @@ function printForm(){
 }
 
 function addToDB($db){
-    $table = '`klienci`(`Id`,`Nazwisko`,`Wiek`,`Panstwo`,`Email`,`Zamowienie`,`Platnosc`)';
+    $table = '`klienci`(`Nazwisko`,`Wiek`,`Panstwo`,`Email`,`Zamowienie`,`Platnosc`)';
 
     $args = ['nazw' => ['filter' => FILTER_VALIDATE_REGEXP,
         'options' => ['regexp' => '/^[A-Z]{1}[a-ząęłńśćźżó-]{1,25}$/']

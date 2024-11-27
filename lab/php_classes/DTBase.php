@@ -56,12 +56,12 @@ class DTBase
         return $tresc;
     }
     protected function query(string $sql): bool{
-        if( $this->mysqli->query($sql)) return true;
+        if($this->mysqli->query($sql)) return true;
         else return false;
     }
     public function insert(string $table, string $values): bool{
-        echo "INSERT INTO `$table` VALUES $values";
-        return $this->query("INSERT INTO `$table` VALUES $values");
+        echo "INSERT INTO $table VALUES $values";
+        return $this->query("INSERT INTO $table VALUES $values");
     }
     public function deleteById($id): bool{
     }
@@ -69,5 +69,5 @@ class DTBase
 
 
 //    SQL
-// INSERT INTO `klienci`(`Id`, `Nazwisko`, `Wiek`, `Panstwo`, `Email`, `Zamowienie`, `Platnosc`) VALUES ('[value-1]','[value-2]','[value-3]','[value-4]','[value-5]','[value-6]','[value-7]')
+// INSERT INTO `klienci`(`Nazwisko`, `Wiek`, `Panstwo`, `Email`, `Zamowienie`, `Platnosc`) VALUES ('','','','','','')
 ?>
