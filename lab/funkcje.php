@@ -53,6 +53,7 @@ function arrToSQLValues($dataArr): string{
         }
         $result .= ',';
     }
+    echo '<br>'.$result;
     return substr($result, 0, -1).')';
 }
 

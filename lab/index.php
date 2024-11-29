@@ -5,17 +5,18 @@ include_once 'funkcje.php';
 require_once 'php_classes/DTBase.php';
 
 
+$kraje = ["Polska", "Wielka Brytania", "Niemcy"];
 $jezyki = ["CPP", "Java", "PHP"];
 $zaplaty = ["Master Card", "Visa", "Przelew"];
 $akcje = ["Wyczyść", "Dodaj", "Pokaż", "PHP", "CPP", "Java", "Staty"];
 
 $submit = isset($_POST['submit']) ? $_POST['submit'] : null;
 
-$dbName = 'klienci';
+$dbName = 'klienci15';
 
 
 function printForm(){
-    global $jezyki, $zaplaty, $akcje;
+    global $kraje, $jezyki, $zaplaty, $akcje;
     echo '<h2>Formularz zamówienia</h2>';
     echo '<form action="index.php" method="POST">';
     echo '<table>';
@@ -23,8 +24,9 @@ function printForm(){
     echo '<tr><td>Wiek:</td><td><input name="wiek" size="30" id="wiek"/></td></tr>';
     echo '<tr><td>Państwo:</td><td>';
     echo '<select name="kraj" id="kraj">';
-    echo '<option value="pl" selected="selected">Polska</option>';
-    echo '<option value="gb">Wielka Brytania</option>';
+    foreach ($kraje as $kraj){
+        echo "<option value='$kraj'>$kraj</option>";
+    }
     echo '</select></td></tr>';
     echo '<tr><td>Adres e-mail: </td><td><input name="email" size="30" id="email"/></td></tr>';
     echo '</table>';
@@ -45,11 +47,11 @@ function printForm(){
 }
 
 function addToDB($db){
-    $table = '`klienci`(`Nazwisko`,`Wiek`,`Panstwo`,`Email`,`Zamowienie`,`Platnosc`)';
+    $table = '`klienci`(`Nazwisko`,`Wiek`,`Panstwo`,`Email`,`Platnosc`,`Zamowienie`)';
 
     $args = ['nazw' => ['filter' => FILTER_VALIDATE_REGEXP,
         'options' => ['regexp' => '/^[A-Z]{1}[a-ząęłńśćźżó-]{1,25}$/']
-    ],
+        ],
         'wiek' => [
             'filter' => FILTER_VALIDATE_INT,
             'options' => [
