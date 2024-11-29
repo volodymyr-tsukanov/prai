@@ -17,6 +17,7 @@ class User {
     protected $passwd;
     protected $date;
     protected $status;
+    protected $db;
 
 
     function __construct($userName, $fullName, $email, $passwd){
@@ -73,6 +74,11 @@ class User {
     }
 
 
+    static function isXMLReady(): bool {
+        return extension_loaded('xml') && class_exists('SimpleXMLElement');
+    }
+
+
     public function show(){
         printf('User: %s %s %s status=%d %s', $this->userName,$this->fullName,$this->email,$this->status,$this->date->format(DateTime::W3C));
     }
@@ -83,7 +89,7 @@ class User {
             return;
         }
 
-        if ($format === self::FORMAT_XML && !(extension_loaded('xml') && class_exists('SimpleXMLElement'))) {
+        if ($format === self::FORMAT_XML && !self::isXMLReady()) {
             echo "<p>XML support is not enabled in PHP</p>";
             return;
         }
@@ -99,6 +105,9 @@ class User {
                 echo "<p>Unsupported format</p>";
                 break;
         }
+    }
+    public static function getAllUsersFromDB(){
+
     }
     private static function displayJsonUsers(string $file){
         $content = file_get_contents($file);
@@ -207,6 +216,9 @@ class User {
 
         // Save XML to file
         return $xml->asXML($file) !== false;
+    }
+    protected function saveDB(): bool {
+
     }
 }
 ?>

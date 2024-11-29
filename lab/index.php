@@ -8,7 +8,7 @@ require_once 'php_classes/DTBase.php';
 $kraje = ["Polska", "Wielka Brytania", "Niemcy"];
 $jezyki = ["CPP", "Java", "PHP"];
 $zaplaty = ["Master Card", "Visa", "Przelew"];
-$akcje = ["Wyczyść", "Dodaj", "Pokaż", "PHP", "CPP", "Java", "Staty"];
+$akcje = ["Wyczyść", "Dodaj", "Pokaż", "PHP", "CPP", "Java", "Staty", "Usuń"];
 
 $submit = isset($_POST['submit']) ? $_POST['submit'] : null;
 
@@ -43,6 +43,7 @@ function printForm(){
     foreach ($akcje as $akcja){
         echo "<input type='submit' name='submit' value='$akcja' />";
     }
+    echo '<h4>Id to remove</h4><input name="deleteWhat" id="deleteWhat" size="20" />';
     echo '</form>';
 }
 
@@ -93,7 +94,7 @@ function addToDB($db){
 
 
 setDebugMode(1);
-printHTMLhead('Lab6: DB', false);
+printHTMLhead('Lab7: Cookies', false);
 
 $db = new DTBase("localhost", "root", "", $dbName);
 
@@ -108,6 +109,9 @@ if (filter_input(INPUT_POST, "submit")) {
         case "Pokaż" :
             echo '<h3>pokazanie z db:</h3>';
             echo $db->select("SELECT Id,Nazwisko,Zamowienie FROM klienci ", ["Id", "Nazwisko", "Zamowienie"]);
+            break;
+        case "Usuń":
+            $db->deleteById('klienci', filter_input(INPUT_POST, "deleteWhat"));
             break;
     }
 }

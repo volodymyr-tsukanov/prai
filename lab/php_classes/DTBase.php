@@ -55,19 +55,24 @@ class DTBase
         }
         return $tresc;
     }
+
     protected function query(string $sql): bool{
         if($this->mysqli->query($sql)) return true;
         else return false;
     }
+
     public function insert(string $table, string $values): bool{
-        echo "INSERT INTO $table VALUES $values";
         return $this->query("INSERT INTO $table VALUES $values");
     }
-    public function deleteById($id): bool{
+
+    protected function delete(string $table, string $where): bool{
+        return $this->query("DELETE FROM $table WHERE $where");
+    }
+    public function deleteById(string $table, $id): bool{
+        return $this->delete($table, "Id=$id");
+    }
+    public function deleteByEmail(string $table, $email): bool{
+        return $this->delete($table, "Email=$id");
     }
 }
-
-
-//    SQL
-// INSERT INTO `klienci`(`Nazwisko`, `Wiek`, `Panstwo`, `Email`, `Zamowienie`, `Platnosc`) VALUES ('','','','','','')
 ?>
