@@ -1,6 +1,8 @@
 <?php
 namespace prai_lab;
 
+require_once 'DTBase.php';
+
 use DateTime;
 use SimpleXMLElement;
 
@@ -20,13 +22,14 @@ class User {
     protected $db;
 
 
-    function __construct($userName, $fullName, $email, $passwd){
+    function __construct($userName, $fullName, $email, $passwd, $db){
         $this->status=User::STATUS_USER;
         $this->userName = $userName;
         $this->fullName = $fullName;
         $this->email = $email;
         $this->passwd = $passwd;
         $this->date = new DateTime('now');
+        $this->db = $db;
     }
 
 
@@ -72,6 +75,9 @@ class User {
     public function setStatus(int $status){
         $this->status = $status;
     }
+    public function setDB(DTBase $db){
+        $this->db = $db;
+    }
 
 
     static function isXMLReady(): bool {
@@ -107,7 +113,8 @@ class User {
         }
     }
     public static function getAllUsersFromDB(){
-
+        print('<h3>All the users</h3>');
+        $this->db->select("SELECT userName, fullName, email, status, date FROM users", ["userName", "fullName", "email", "status", "date"]);
     }
     private static function displayJsonUsers(string $file){
         $content = file_get_contents($file);
@@ -217,8 +224,8 @@ class User {
         // Save XML to file
         return $xml->asXML($file) !== false;
     }
-    protected function saveDB(): bool {
-
+    public function saveDB(): bool{
+        return $this->db->insert('`users`(`userName`,`fullName`,`email`,`status`,`date`,`passwd`)', "'$this->userName','$this->fullName','$this->email','$this->status',''$this->date',''$this->passwd'");
     }
 }
 ?>
