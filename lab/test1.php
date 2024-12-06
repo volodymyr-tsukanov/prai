@@ -1,17 +1,26 @@
 <?php
+include_once 'funkcje.php';
+include_once 'php_classes/User.php';
+use prai_lab\User;
+
+setDebugMode(1);
+
 session_start();
 
-$_SESSION['username'] = 'kubus';
-$_SESSION['fullname'] = 'Kubus Puchatek';
-$_SESSION['email'] = 'kubus@stumilowylas.pl';
-$_SESSION['status'] = 'ADMIN';
+$user = new User('kubus', 'Kubus Puchatek', 'kubus@stumilowylas.pl', 'password123', $db);
+$_SESSION['user'] = serialize($user);
 
 echo "<h3>Id sesji: " . session_id() . "</h3>";
-
-echo "<h4>Sesja kontent:</h4>";
-echo "<ul>";
-foreach ($_SESSION as $key => $value) {
-    echo "<li>" . htmlspecialchars($key) . ": " . htmlspecialchars($value) . "</li>";
+echo "<h4>Sesja kontent:</h4><ul>";
+if (isset($_SESSION['user'])) {
+    $sessionUser = unserialize($_SESSION['user']);
+    if ($sessionUser instanceof User) {
+        echo "<li>Username: " . htmlspecialchars($sessionUser->getUserName()) . "</li>";
+        echo "<li>Full Name: " . htmlspecialchars($sessionUser->getFullName()) . "</li>";
+        echo "<li>Email: " . htmlspecialchars($sessionUser->getEmail()) . "</li>";
+        echo "<li>Status: " . ($sessionUser->getStatus() == User::STATUS_ADMIN ? 'ADMIN' : 'USER') . "</li>";
+        echo "<li>Date: " . htmlspecialchars($sessionUser->getDate()->format(DateTime::W3C)) . "</li>";
+    }
 }
 echo "</ul>";
 
