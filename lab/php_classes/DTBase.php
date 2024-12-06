@@ -53,7 +53,7 @@ class DTBase
         $passwdHash = password_hash($passwd,PASSWORD_ARGON2I);
         $response = $this->mysqli->query("SELECT * FROM $table WHERE userName='$userName' AND passwd='$passwdHash'");
         $res = $response->fetch_object();
-        echo "$res";
+        echo $res->userName;
         $response->close();
         return -1;
     }
