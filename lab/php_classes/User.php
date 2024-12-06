@@ -19,10 +19,10 @@ class User {
     protected $passwd;
     protected $date;
     protected $status;
-    protected $db;
+    protected DTBase $db;
 
 
-    function __construct($userName, $fullName, $email, $passwd, $db){
+    function __construct($userName, $fullName, $email, $passwd, DTBase $db){
         $this->status=User::STATUS_USER;
         $this->userName = $userName;
         $this->fullName = $fullName;
@@ -86,7 +86,7 @@ class User {
 
 
     public function show(){
-        printf('User: %s %s %s status=%d %s', $this->userName,$this->fullName,$this->email,$this->status,$this->date->format(DateTime::W3C));
+        printf('User: %s %s %s status=%d %s', $this->userName,$this->fullName,$this->email,$this->status,$this->date->format('Y-m-d H:i:s'));
     }
 
     public static function getAllUsers(string $file, string $format = self::FORMAT_JSON){
@@ -161,7 +161,7 @@ class User {
             "fullName" => $this->fullName,
             "email" => $this->email,
             "passwd" => $this->passwd,
-            "date" => $this->date->format(DateTime::W3C),
+            "date" => $this->date->format('Y-m-d H:i:s'),
             "status" => $this->status
         ];
     }
@@ -218,14 +218,16 @@ class User {
         $userElement->addChild('fullName', $this->fullName);
         $userElement->addChild('email', $this->email);
         $userElement->addChild('passwd', $this->passwd);
-        $userElement->addChild('date', $this->date->format(DateTime::W3C));
+        $userElement->addChild('date', $this->date->format('Y-m-d H:i:s'));
         $userElement->addChild('status', $this->status);
 
         // Save XML to file
         return $xml->asXML($file) !== false;
     }
     public function saveDB(): bool{
-        return $this->db->insert('`users`(`userName`,`fullName`,`email`,`status`,`date`,`passwd`)', "'$this->userName','$this->fullName','$this->email','$this->status',''$this->date',''$this->passwd'");
+        $dateFormatted = $this->date->format('Y-m-d H:i:s');
+        $passwdHash = password_hash($this->passwd,PASSWORD_ARGON2ID);
+        return $this->db->insert('`users`(`userName`,`fullName`,`email`,`status`,`date`,`passwd`)', "('$this->userName','$this->fullName','$this->email','$this->status','$dateFormatted','$passwdHash')");
     }
 }
 ?>

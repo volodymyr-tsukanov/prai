@@ -32,7 +32,32 @@ class DTBase
     }
 
 
-    public function select($sql, $pola) {
+    public function insert(string $table, string $values): bool{
+        return $this->mysqli->query("INSERT INTO $table VALUES $values");
+    }
+
+    protected function delete(string $table, string $where): bool{
+        return $this->mysqli->query("DELETE FROM $table WHERE $where");
+    }
+    public function deleteById(string $table, $id): bool{
+        return $this->delete($table, "id=$id");
+    }
+    public function deleteByUsername(string $table, $userName): bool{
+        return $this->delete($table, "userName='$userName'");
+    }
+    public function deleteByEmail(string $table, $email): bool{
+        return $this->delete($table, "email='$email'");
+    }
+
+    public function selectUser(string $table, string $userName, string $passwd): int{
+        $passwdHash = password_hash($passwd,PASSWORD_ARGON2I);
+        $response = $this->mysqli->query("SELECT * FROM $table WHERE userName='$userName' AND passwd='$passwdHash'");
+        $res = $response->fetch_object();
+        echo "$res";
+        $response->close();
+        return -1;
+    }
+    public function selectAll($sql, $pola) {
         //parametr $sql – łańcuch zapytania select
         //parametr $pola - tablica z nazwami pol w bazie
         //Wynik funkcji – kod HTML tabeli z rekordami (String)
@@ -54,25 +79,6 @@ class DTBase
             $result->close(); // zwolnij pamięć
         }
         return $tresc;
-    }
-
-    protected function query(string $sql): bool{
-        if($this->mysqli->query($sql)) return true;
-        else return false;
-    }
-
-    public function insert(string $table, string $values): bool{
-        return $this->query("INSERT INTO $table VALUES $values");
-    }
-
-    protected function delete(string $table, string $where): bool{
-        return $this->query("DELETE FROM $table WHERE $where");
-    }
-    public function deleteById(string $table, $id): bool{
-        return $this->delete($table, "Id=$id");
-    }
-    public function deleteByEmail(string $table, $email): bool{
-        return $this->delete($table, "Email=$id");
     }
 }
 ?>

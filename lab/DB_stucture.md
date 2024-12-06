@@ -5,7 +5,7 @@ sort method : `utf8mb4_general_c`
 
 # Tables
 ## klienci
-```
+```sql
 CREATE TABLE IF NOT EXISTS `klienci` (
  `Id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
  `Nazwisko` varchar(40) NOT NULL ,
@@ -20,12 +20,12 @@ DEFAULT 'Polska',
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ```
 ### example use
-```
+```sql
 INSERT INTO `klienci`(`Nazwisko`,`Wiek`,`Panstwo`,`Email`,`Zamowienie`,`Platnosc`) VALUES ('',...)
 ```
 
 ## users
-```
+```sql
 CREATE TABLE IF NOT EXISTS `users` (
 `id` int(11) NOT NULL AUTO_INCREMENT,
 `userName` varchar(100) NOT NULL,
@@ -39,4 +39,15 @@ UNIQUE KEY `userName`
 (`userName`,`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
 AUTO_INCREMENT=1 ;
+```
+
+
+## logged_in_users
+```sql
+CREATE TABLE IF NOT EXISTS `logged_in_users` (
+`sessionId` varchar(100) NOT NULL,
+`userId` int(11) NOT NULL,
+`lastUpdate` datetime NOT NULL,
+PRIMARY KEY (`sessionId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ```
