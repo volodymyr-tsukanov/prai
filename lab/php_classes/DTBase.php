@@ -1,11 +1,14 @@
 <?php
 namespace prai_lab;
 
+use stdClass;
 use mysqli;
 
 
 class DTBase
 {
+    private const PARAMS = ['server'=>'localhost','user'=>'root','pass'=>''];
+
     private $mysqli; //uchwyt do BD
 
 
@@ -13,17 +16,23 @@ class DTBase
         $this->mysqli = new mysqli($serwer, $user, $pass, $baza);
         /* sprawdz połączenie */
         if ($this->mysqli->connect_errno) {
-            printf("Nie udało sie połączenie z serwerem: %s\n",
-                $mysqli->connect_error);
-            exit();
+            $this->mysqli = new mysqli(self::PARAMS['server'],self::PARAMS['user'],self::PARAMS['pass'], $baza);   //try with default params
+            if ($this->mysqli->connect_errno){
+                printf("Nie udało sie połączenie z serwerem: %s\n", $this->mysqli->connect_error);
+                exit();
+            }
         }
         /* zmien kodowanie na utf8 */
         if ($this->mysqli->set_charset("utf8")) {
             //udało sie zmienić kodowanie
         }
     }
-    function __destruct() {
-        $this->mysqli->close();
+    function __destruct(){
+        //debug_print_backtrace();
+        if(isset($this->mysqli)){
+            $this->mysqli->close();
+            unset($this->mysqli);
+        }
     }
 
 
@@ -33,14 +42,14 @@ class DTBase
 
 
     public function insert(string $table, string $values): bool{
-        return $this->mysqli->query("INSERT INTO $table VALUES $values");
+        return $this->mysqli->query("INSERT INTO $table VALUES ($values)");
     }
 
-    protected function delete(string $table, string $where): bool{
+    public function delete(string $table, string $where): bool{
         return $this->mysqli->query("DELETE FROM $table WHERE $where");
     }
-    public function deleteById(string $table, $id): bool{
-        return $this->delete($table, "id=$id");
+    public function deleteById(string $table, int $id): bool{
+        return $this->delete($table, "userId=$id");
     }
     public function deleteByUsername(string $table, $userName): bool{
         return $this->delete($table, "userName='$userName'");
@@ -49,22 +58,33 @@ class DTBase
         return $this->delete($table, "email='$email'");
     }
 
-    public function selectUser(string $table, string $userName, string $passwd): int{
-        $passwdHash = password_hash($passwd,PASSWORD_ARGON2I);
-        $response = $this->mysqli->query("SELECT * FROM $table WHERE userName='$userName' AND passwd='$passwdHash'");
-        $res = $response->fetch_object();
-        echo $res->userName;
+    public function select(string $table, string $what, string $where): stdClass|null{
+        $response = $this->mysqli->query("SELECT $what FROM $table WHERE $where");
+        $res = null;
+        if($response->num_rows > 0){
+            $res = $response->fetch_object();
+        }
         $response->close();
-        return -1;
+        return $res;
+    }
+    public function selectUser(string $table, string $userName, string $passwd): stdClass|null{
+        $passHash = hash('sha256',$passwd);
+        $response = $this->mysqli->query("SELECT id,userName,fullName,email,date FROM $table WHERE userName='$userName' AND passwd='$passHash'");
+        $res = null;
+        if($response->num_rows > 0){
+            $res = $response->fetch_object();
+        } else { echo "NO USER: $userName"; }
+        $response->close();
+        return $res;
     }
     public function selectAll($sql, $pola) {
         //parametr $sql – łańcuch zapytania select
         //parametr $pola - tablica z nazwami pol w bazie
         //Wynik funkcji – kod HTML tabeli z rekordami (String)
         $tresc = "";
-        if ($result = $this->mysqli->query($sql)) {
+        $result = $this->mysqli->query($sql);
+        if ($result->num_rows > 0) {
             $ilepol = count($pola); //ile pól
-            $ile = $result->num_rows; //ile wierszy
             // pętla po wyniku zapytania $results
             $tresc.="<table><tbody>";
             while ($row = $result->fetch_object()) {

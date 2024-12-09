@@ -1,14 +1,19 @@
 <?php
 namespace prai_lab;
 
+include_once 'User.php';
+
+use prai_lab\DTBase;
+
+
 
 class RegistrationForm {
-    protected ?User $user;
+    protected User $user;
 
 
     function __construct(){
         echo '<h3>Formularz rejestracji</h3><p>';
-        echo '<form action="index.php" method="POST">
+        echo '<form action="loginProcess.php?new=" method="POST">
             <label for="userName">Nazwa użytkownika:</label><br/>
             <input id="userName" name="userName" minlength="4" maxlength="25" placeholder="4-25 characters, alphanumeric, _ or -" required/><br/>
             
@@ -29,7 +34,13 @@ class RegistrationForm {
     }
 
 
-    function checkUser() : ?User {
+    function getUser(): User|null{
+        if(isset($this->user)) return $this->user;
+        else return null;
+    }
+
+
+    function checkUser(DTBase& $db): User|null{
         $args = [
             'userName' => ['filter' => FILTER_VALIDATE_REGEXP,
                 'options' => ['regexp' => '/^[0-9A-Za-z_-]{4,25}$/']
@@ -45,7 +56,7 @@ class RegistrationForm {
 
         $errors = "";
         foreach ($dane as $key => $val){
-            if ($val === false or $val === NULL){
+            if ($val === false or $val === null){
                 $errors .= $key.'<br>';
             }
         }
@@ -54,13 +65,12 @@ class RegistrationForm {
         }
 
         if ($errors === "") {
-            $this->user = new User($dane['userName'], $dane['fullName'], $dane['email'], $dane['passwd']);
+            $this->user = new User($dane['userName'], $dane['fullName'], $dane['email'], $dane['passwd'], $db);
+            return $this->user;
         } else {
             echo "<p>Błędne dane: $errors</p>";
-            $this->user = NULL;
         }
-
-        return $this->user;
+        return null;
     }
 }
 ?>

@@ -1,10 +1,10 @@
 <?php
 namespace prai_lab;
 
-require_once 'DTBase.php';
-
+use stdClass;
 use DateTime;
 use SimpleXMLElement;
+use prai_lab\DTBase;
 
 
 class User {
@@ -22,7 +22,7 @@ class User {
     protected DTBase $db;
 
 
-    function __construct($userName, $fullName, $email, $passwd, DTBase $db){
+    function __construct($userName, $fullName, $email, $passwd, DTBase& $db){
         $this->status=User::STATUS_USER;
         $this->userName = $userName;
         $this->fullName = $fullName;
@@ -30,6 +30,17 @@ class User {
         $this->passwd = $passwd;
         $this->date = new DateTime('now');
         $this->db = $db;
+    }
+    function __destruct(){
+        unset($this->date);
+    }
+
+    public static function fromStdClass(stdClass $object, string $passwd, DTBase& $db): User{
+        return new self($object->userName, $object->fullName, $object->email, $passwd, $db);
+    }
+    public static function fromJson(string $jsonData, DTBase& $db): User{
+        $json = json_decode($jsonData);
+        return new self($json->userName, $json->fullName, $json->email, $json->passwd, $db);
     }
 
 
@@ -112,10 +123,6 @@ class User {
                 break;
         }
     }
-    public static function getAllUsersFromDB(){
-        print('<h3>All the users</h3>');
-        $this->db->select("SELECT userName, fullName, email, status, date FROM users", ["userName", "fullName", "email", "status", "date"]);
-    }
     private static function displayJsonUsers(string $file){
         $content = file_get_contents($file);
         if ($content === false){
@@ -175,6 +182,9 @@ class User {
         
         return $xml;
     }
+    public function toJSON(): string{
+        return json_encode($this->toArray());
+    }
 
     public function save(string $file, string $format = self::FORMAT_JSON): bool {
         switch ($format){
@@ -226,8 +236,13 @@ class User {
     }
     public function saveDB(): bool{
         $dateFormatted = $this->date->format('Y-m-d H:i:s');
-        $passwdHash = password_hash($this->passwd,PASSWORD_ARGON2ID);
-        return $this->db->insert('`users`(`userName`,`fullName`,`email`,`status`,`date`,`passwd`)', "('$this->userName','$this->fullName','$this->email','$this->status','$dateFormatted','$passwdHash')");
+        $passHash = hash('sha256',$this->passwd);
+        return $this->db->insert('`users`(`userName`,`fullName`,`email`,`status`,`date`,`passwd`)', "'$this->userName','$this->fullName','$this->email','$this->status','$dateFormatted','$passHash'");
+    }
+
+    public function getAllUsersFromDB(){
+        print('<h3>All the users</h3>');
+        echo $this->db->selectAll("SELECT userName,fullName,email,date FROM users", ["userName","fullName","email","date"]);
     }
 }
 ?>

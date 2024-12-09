@@ -1,9 +1,9 @@
 <?php
 namespace prai_lab;
 
+require_once 'php_classes/DTBase.php';
 include_once 'funkcje.php';
 include_once 'php_classes/User.php';
-require_once 'php_classes/DTBase.php';
 
 
 $kraje = ["Polska", "Wielka Brytania", "Niemcy"];
@@ -12,8 +12,6 @@ $zaplaty = ["Master Card", "Visa", "Przelew"];
 $akcje = ["Wyczyść", "Dodaj", "Pokaż", "PHP", "CPP", "Java", "Staty", "Usuń"];
 
 $submit = isset($_POST['submit']) ? $_POST['submit'] : null;
-
-$dbName = 'klienci15';
 
 
 function printForm(){
@@ -80,7 +78,7 @@ function addToDB($db){
     //Sprawdź czy dane w tablicy $dane nie zawierają błędów walidacji:
     $errors = "";
     foreach ($dane as $key => $val) {
-        if ($val === false or $val === NULL) {
+        if ($val === false or $val === null) {
             $errors .= $key.' ';
         }
     }
@@ -97,24 +95,24 @@ function addToDB($db){
 setDebugMode(1);
 printHTMLhead('Lab8: Login', false);
 
-$db = new DTBase("localhost", "root", "", $dbName);
+$db = new DTBase("localhost", "tester", "pub0key", DB_NAME); //was root ""
 
-//$user = new User('kubus', 'Kubus Puchatek', 'kubus@stumilowylas.pl', 'password123', $db);
+$user = new User('kubus', 'Kubus Puchatek', 'kubus@stumilowylas.pl', 'password123', $db);
 //$user->saveDB();
-//$db->selectAll("SELECT id,userName,fullName,email,status,date FROM users ", ["Id","Username","Fullname","Email","Email","Status"]);
-$db->selectUser('users',"kubus","password123");
+$user->getAllUsersFromDB();
+//$db->selectUser('users','kubus','password123');
 
 printForm();
 
 if (filter_input(INPUT_POST, "submit")) {
     $akcja = filter_input(INPUT_POST, "submit");
     switch ($akcja) {
-        case "Dodaj" :
+        case "Dodaj":
             echo 'dodanie do db: '.addToDB($db);
             break;
-        case "Pokaż" :
+        case "Pokaż":
             echo '<h3>pokazanie z db:</h3>';
-            $db->selectAll("SELECT Id,Nazwisko,Zamowienie FROM klienci ", ["Id", "Nazwisko", "Zamowienie"]);
+            echo $db->selectAll("SELECT Id,Nazwisko,Zamowienie FROM klienci", ["Id", "Nazwisko", "Zamowienie"]);
             break;
         case "Usuń":
             $db->deleteById('klienci', filter_input(INPUT_POST, "deleteWhat"));

@@ -1,4 +1,9 @@
 <?php
+// Constants
+const DB_NAME = 'prai';   //was klienci
+
+
+// Debug
 function setDebugMode($mode){
     if($mode == 1){
         error_reporting(E_ALL);
@@ -26,6 +31,11 @@ function printHTMLhead($title,$useStyle=false){
 }
 function printHTMLtail(){
     print("</body></html>");
+}
+
+function redirect($page){
+    header("Location: $page");
+    exit();
 }
 
 
@@ -139,5 +149,15 @@ function showByTut($tut, $line, $tableFormat=false){
             break;
         }
     }
+}
+
+
+// Session
+function sessionDestroy(){
+    session_destroy();
+    if (isset($_COOKIE[session_name()])) {
+        setcookie(session_name(), '', time() - 3600, '/');
+    }
+    $_SESSION = array();
 }
 ?>
