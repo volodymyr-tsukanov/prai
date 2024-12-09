@@ -33,11 +33,6 @@ function printHTMLtail(){
     print("</body></html>");
 }
 
-function redirect($page){
-    header("Location: $page");
-    exit();
-}
-
 
 // Data format
 function implodeData($dataArr): string{
@@ -159,5 +154,10 @@ function sessionDestroy(){
         setcookie(session_name(), '', time() - 3600, '/');
     }
     $_SESSION = array();
+}
+
+function redirect($location){
+    header("location:$location");
+    exit();
 }
 ?>

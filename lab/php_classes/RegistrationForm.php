@@ -13,7 +13,7 @@ class RegistrationForm {
 
     function __construct(){
         echo '<h3>Formularz rejestracji</h3><p>';
-        echo '<form action="loginProcess.php?new=" method="POST">
+        echo '<form action="loginProcess.php?act=rgr" method="POST">
             <label for="userName">Nazwa użytkownika:</label><br/>
             <input id="userName" name="userName" minlength="4" maxlength="25" placeholder="4-25 characters, alphanumeric, _ or -" required/><br/>
             

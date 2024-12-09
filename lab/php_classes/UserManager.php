@@ -39,7 +39,7 @@ class UserManager {
             return -2;
         }
 
-        if ($result = $this->db->selectUser('users',$userName,$passwd)){
+        if ($result = $this->db->selectUser($userName,$passwd)){
             // jezeli sesja jest to resetuj
             if(isset($_SESSION['user'])){
                 echo "Najpierw wyloguj!";
@@ -91,6 +91,14 @@ class UserManager {
         }
         sessionDestroy();   //usuwamy nie istniajaca sesje
         return -1;
+    }
+    public function getUserBySsId(): User|null{
+        $userId = $this->getLoggedInUser();
+        if($userId < 0) return null;
+        if($result = $this->db->selectUserById($userId)){
+            return User::fromStdClass($result,'',$this->db);
+        }
+        return null;
     }
 }
 ?>

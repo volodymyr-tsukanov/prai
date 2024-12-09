@@ -67,15 +67,12 @@ class DTBase
         $response->close();
         return $res;
     }
-    public function selectUser(string $table, string $userName, string $passwd): stdClass|null{
+    public function selectUser(string $userName, string $passwd): stdClass|null{
         $passHash = hash('sha256',$passwd);
-        $response = $this->mysqli->query("SELECT id,userName,fullName,email,date FROM $table WHERE userName='$userName' AND passwd='$passHash'");
-        $res = null;
-        if($response->num_rows > 0){
-            $res = $response->fetch_object();
-        } else { echo "NO USER: $userName"; }
-        $response->close();
-        return $res;
+        return $this->select('users','id,userName,fullName,email,date',"userName='$userName' AND passwd='$passHash'");
+    }
+    public function selectUserById(int $userId): stdClass|null{
+        return $this->select('users','userName,fullName,email,passwd,date',"id=$userId");
     }
     public function selectAll($sql, $pola) {
         //parametr $sql – łańcuch zapytania select
